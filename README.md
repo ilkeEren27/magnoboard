@@ -1,6 +1,6 @@
-## 🧲 **Project Name:** MagnoBoard
+# 🧲 **Project Name:** MagnoBoard
 
-### 🧠 **Inspiration**
+## 🧠 **Inspiration**
 
 Remember those old magnetic drawing boards where you’d drag a stylus and the tiny beads would rise to form lines?
 
@@ -12,7 +12,7 @@ No logins, no complexity, just a digital toy that lets anyone doodle freely, lik
 
 ---
 
-### 💡 **What it Does**
+## 💡 **What it Does**
 
 MagnoBoard is an online playground where users can:
 
@@ -25,7 +25,7 @@ It’s simple, creative, and relaxing, the kind of app that makes your inner chi
 
 ---
 
-### ⚙️ AI & Internet Usage Disclosure
+## ⚙️ AI & Internet Usage Disclosure
 
 **AI & External Resources**
 
