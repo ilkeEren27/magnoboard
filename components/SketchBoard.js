@@ -161,7 +161,7 @@ export default function SketchBoard() {
           </div>
         </motion.div>
 
-        <p className="text-center text-xs text-gray-500 mt-2">
+        <p className="hidden md:block text-center text-xs text-gray-500 mt-2">
           Tip: motion sensors need HTTPS and may require tapping “Enable motion
           access” on iOS.
         </p>
@@ -257,7 +257,7 @@ export default function SketchBoard() {
           </div>
         </motion.div>
 
-        <p className="flex md:hidden text-center text-xs text-gray-500 mt-2">
+        <p className="block md:hidden text-center text-xs text-gray-500 mt-2">
           Tip: motion sensors need HTTPS and may require tapping “Enable motion
           access” on iOS.
         </p>
