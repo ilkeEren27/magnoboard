@@ -56,7 +56,7 @@ export default function SketchBoard() {
   // 🌀 shake → reset
   useShake({
     onShake: handleReset,
-    threshold: 18, // tweak if too sensitive
+    threshold: 30, // tweak if too sensitive
     cooldown: 900, // prevent spam
   });
 
