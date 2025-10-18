@@ -29,7 +29,7 @@ It’s simple, creative, and relaxing, the kind of app that makes your inner chi
 
 **AI & External Resources**
 
-During development, I used documentation (Next.js, TailwindCSS) and community resources (Stack Overflow, MDN).
+During development, I used documentation (Next.js, TailwindCSS, react-sketh-canvas and Konva.js) and community resources (Stack Overflow, MDN).
 
 I also used AI tools (ChatGPT and GitHub Copilot) for debugging help, UI suggestions, and boilerplate generation.
 
