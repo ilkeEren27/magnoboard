@@ -1,17 +1,18 @@
 "use client";
 import { ReactSketchCanvas } from "react-sketch-canvas";
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { GoogleGenAI } from "@google/genai";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { DotPattern } from "./ui/dot-pattern";
 import { cn } from "@/lib/utils";
+import useShake from "@/hooks/useShake";
 
 const MotionButton = motion(Button);
 
 export default function SketchBoard() {
   const ai = new GoogleGenAI({
-    apiKey: "AIzaSyC0_ocMkiQTwbsTXpWEgJylURCufSDZatI",
+    apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
   });
 
   const canvasRef = useRef(null);
@@ -20,13 +21,52 @@ export default function SketchBoard() {
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
 
+  // iOS motion permission
+  const [motionReady, setMotionReady] = useState(false);
+  const askMotionPermission = async () => {
+    try {
+      const DM =
+        typeof window !== "undefined" ? window.DeviceMotionEvent : null;
+      if (DM && typeof DM.requestPermission === "function") {
+        const res = await DM.requestPermission();
+        setMotionReady(res === "granted");
+      } else {
+        setMotionReady(true); // Android/desktop
+      }
+    } catch {
+      setMotionReady(false);
+    }
+  };
+  useEffect(() => {
+    const DM = typeof window !== "undefined" ? window.DeviceMotionEvent : null;
+    if (!(DM && typeof DM.requestPermission === "function"))
+      setMotionReady(true);
+  }, []);
+
+  const handleStrokeColorChange = (event) => {
+    setStrokeColor(event.target.value);
+  };
+
+  const handleReset = useCallback(() => {
+    canvasRef.current?.resetCanvas();
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 500);
+  }, []);
+
+  // 🌀 shake → reset
+  useShake({
+    onShake: handleReset,
+    threshold: 18, // tweak if too sensitive
+    cooldown: 900, // prevent spam
+  });
+
   const createPrompt = async () => {
     setIsLoading(true);
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents:
-          "Give me an idea to draw, make it simple as possible, it can be animal, fruits/vegetables, nature. Be simple as you can in your answers like 'draw a snake', or 'draw a apple tree', not longer than a sentence and only one suggestion at the moment.",
+          "Give me an idea to draw, make it simple as possible, it can be animal, fruits/vegetables, nature. Be simple as you can in your answers like 'draw a snake', or 'draw a apple tree', also use adjectives like 'draw big snake' or 'draw blue bird', not longer than a sentence and only one suggestion at the moment.",
       });
       const text = response.text;
       setPrompt(text);
@@ -36,16 +76,6 @@ export default function SketchBoard() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleStrokeColorChange = (event) => {
-    setStrokeColor(event.target.value);
-  };
-
-  const handleReset = () => {
-    canvasRef.current?.resetCanvas();
-    setIsShaking(true);
-    setTimeout(() => setIsShaking(false), 500);
   };
 
   return (
@@ -58,6 +88,7 @@ export default function SketchBoard() {
           onChange={handleStrokeColorChange}
         />
       </div>
+
       <div className="flex justify-center items-center gap-4 mb-4">
         <MotionButton
           whileTap={{ scale: 0.9 }}
@@ -66,6 +97,17 @@ export default function SketchBoard() {
         >
           Shake
         </MotionButton>
+
+        {/* Enable motion access for iOS */}
+        {!motionReady && (
+          <Button
+            onClick={askMotionPermission}
+            className="bg-amber-500 hover:bg-amber-600"
+          >
+            Enable motion access
+          </Button>
+        )}
+
         <Button
           onClick={createPrompt}
           disabled={isLoading}
@@ -73,6 +115,7 @@ export default function SketchBoard() {
         >
           {isLoading ? "Generating..." : "Give me an idea"}
         </Button>
+
         <Button
           className="bg-blue-500 hover:bg-blue-700"
           onClick={() => {
@@ -89,6 +132,7 @@ export default function SketchBoard() {
           Get Image
         </Button>
       </div>
+
       {prompt && (
         <div className="flex justify-center mb-4">
           <div className="bg-green-100 border border-green-300 rounded-lg p-4 max-w-md text-center">
@@ -97,19 +141,11 @@ export default function SketchBoard() {
           </div>
         </div>
       )}
+
       <section>
         <motion.div
-          animate={
-            isShaking
-              ? {
-                  x: [-10, 10, -8, 8, -6, 6, 0],
-                }
-              : {}
-          }
-          transition={{
-            duration: 0.5,
-            ease: "easeInOut",
-          }}
+          animate={isShaking ? { x: [-10, 10, -8, 8, -6, 6, 0] } : {}}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
           className="flex justify-center"
         >
           <div className="border-8 border-solid border-amber-400 rounded-lg overflow-hidden w-400 relative">
@@ -134,6 +170,11 @@ export default function SketchBoard() {
             />
           </div>
         </motion.div>
+
+        <p className="text-center text-xs text-gray-500 mt-2">
+          Tip: motion sensors need HTTPS and may require tapping “Enable motion
+          access” on iOS.
+        </p>
       </section>
     </main>
   );
