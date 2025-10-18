@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 🧲 **Project Name:** MagnoBoard
 
-## Getting Started
+### 🧠 **Inspiration**
 
-First, run the development server:
+Remember those old magnetic drawing boards where you’d drag a stylus and the tiny beads would rise to form lines?
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+MagnoBoard brings that nostalgic feeling to life, but digitally.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The theme of this year’s hackathon is childhood imagination, and I wanted to build something that captures the  *joy of creating without limits* .
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+No logins, no complexity, just a digital toy that lets anyone doodle freely, like we did as kids.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+### 💡 **What it Does**
 
-To learn more about Next.js, take a look at the following resources:
+MagnoBoard is an online playground where users can:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Draw with a digital “magnetic pen.”
+* Shake or clear the board with a button animation (like flipping the toy upside down).
+* (Optional) Save or share their creations.
+* (Optional) Get random *drawing prompts* powered by AI, like “Draw your favorite toy” or “What did you want to be when you grew up?”
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+It’s simple, creative, and relaxing, the kind of app that makes your inner child proud.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### ⚙️ AI & Internet Usage Disclosure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**AI & External Resources**
+
+During development, I used documentation (Next.js, TailwindCSS) and community resources (Stack Overflow, MDN).
+
+I also used AI tools (ChatGPT and GitHub Copilot) for debugging help, UI suggestions, and boilerplate generation.
+
+All design decisions, core logic, and final implementation were done and verified by me.
