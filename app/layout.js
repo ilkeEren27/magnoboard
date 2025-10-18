@@ -1,4 +1,5 @@
 import { Kalam } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const kalam = Kalam({
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${kalam.variable}`}>
         {children}
+        <Analytics />
         <footer className="w-full h-24 flex items-center justify-center border-t mt-8">
           <p className="text-center">
             Made by{" "}
