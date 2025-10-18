@@ -124,7 +124,7 @@ export default function SketchBoard() {
       </div>
 
       {prompt && (
-        <div className="flex justify-center mb-4">
+        <div className="hidden md:flex justify-center mb-4">
           <div className="bg-green-100 border border-green-300 rounded-lg p-4 max-w-md text-center">
             <p className="text-lg font-medium text-green-800">Drawing Idea:</p>
             <p className="text-green-700">{prompt}</p>
