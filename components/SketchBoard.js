@@ -176,15 +176,8 @@ export default function SketchBoard() {
         />
       </div>
 
-      <div className="flex md:hidden justify-center items-center gap-4 mb-4">
-        <MotionButton
-          whileTap={{ scale: 0.9 }}
-          onClick={handleReset}
-          className="bg-red-500 hover:bg-red-700"
-        >
-          Shake
-        </MotionButton>
-
+      <div className="flex md:hidden justify-center my-4">
+        {" "}
         {/* Enable motion access for iOS */}
         {!motionReady && (
           <Button
@@ -194,6 +187,12 @@ export default function SketchBoard() {
             Enable motion access
           </Button>
         )}
+      </div>
+
+      <div className="flex md:hidden justify-center items-center gap-4 mb-4">
+        <Button onClick={handleReset} className="bg-red-500 hover:bg-red-700">
+          Shake
+        </Button>
 
         <Button
           onClick={createPrompt}
