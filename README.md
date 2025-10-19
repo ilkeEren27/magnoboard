@@ -29,8 +29,6 @@ It’s simple, creative, and relaxing, the kind of app that makes your inner chi
 
 **AI & External Resources**
 
-During development, I only used documentation (Next.js, TailwindCSS, ShadCN and react-sketh-canvas).
-
-I also used AI tools (ChatGPT and GitHub Copilot) for debugging help, UI suggestions, and boilerplate generation.
+During development, I used documentation (Next.js, TailwindCSS, ShadCN and react-sketh-canvas) and AI tools (ChatGPT and GitHub Copilot) for debugging help, UI suggestions, and boilerplate generation.
 
 All design decisions, core logic, and final implementation were done and verified by me.
