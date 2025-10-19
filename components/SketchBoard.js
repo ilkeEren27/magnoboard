@@ -359,7 +359,7 @@ export default function SketchBoard() {
           transition={{ duration: 0.5, ease: "easeInOut" }}
           className="flex md:hidden justify-center"
         >
-          <div className="border-8 border-solid border-amber-400 rounded-lg overflow-hidden w-400 relative">
+          <div className="border-8 border-solid border-indigo-300 rounded-lg overflow-hidden w-400 relative">
             <DotPattern
               width={20}
               height={20}
