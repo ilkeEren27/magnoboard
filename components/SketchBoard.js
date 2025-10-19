@@ -22,7 +22,10 @@ export default function SketchBoard() {
   });
 
   const canvasRef = useRef(null);
+  const colorChangeTimeoutRef = useRef(null);
   const [strokeColor, setStrokeColor] = useState("#000000");
+  const [previousColor1, setPreviousColor1] = useState("#ffffff");
+  const [previousColor2, setPreviousColor2] = useState("#ffffff");
   const [isShaking, setIsShaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
@@ -50,9 +53,63 @@ export default function SketchBoard() {
   }, []);
 
   // Canvas features
-  const handleStrokeColorChange = (event) => {
-    setStrokeColor(event.target.value);
-  };
+  // Store the previous stroke color to track changes
+  const [lastCommittedColor, setLastCommittedColor] = useState("#000000");
+
+  const handleStrokeColorChange = useCallback((event) => {
+    const newColor = event.target.value;
+
+    // Update stroke color immediately for visual feedback
+    setStrokeColor(newColor);
+  }, []);
+
+  const handleStrokeColorChangeEnd = useCallback(
+    (event) => {
+      const newColor = event.target.value;
+
+      // Clear existing timeout
+      if (colorChangeTimeoutRef.current) {
+        clearTimeout(colorChangeTimeoutRef.current);
+      }
+
+      // Set a timeout to save the color to history only after user stops changing
+      colorChangeTimeoutRef.current = setTimeout(() => {
+        // Only update previous colors if the color actually changed and is different
+        if (newColor !== lastCommittedColor && newColor !== previousColor1) {
+          // Shift colors: current -> previous1, previous1 -> previous2
+          setPreviousColor2(previousColor1);
+          setPreviousColor1(lastCommittedColor);
+        }
+        setLastCommittedColor(newColor);
+      }, 100); // Reduced delay
+    },
+    [lastCommittedColor, previousColor1]
+  );
+
+  const handlePreviousColorClick = useCallback(
+    (color) => {
+      if (color !== strokeColor) {
+        // Clear any pending timeout since this is an intentional color change
+        if (colorChangeTimeoutRef.current) {
+          clearTimeout(colorChangeTimeoutRef.current);
+        }
+
+        // Swap colors instead of shifting to preserve all three colors
+        if (color === previousColor1) {
+          // Swap current color with previous color 1
+          setPreviousColor1(strokeColor);
+          setStrokeColor(color);
+          setLastCommittedColor(color);
+        } else if (color === previousColor2) {
+          // Swap current color with previous color 2
+          setPreviousColor2(strokeColor);
+          setStrokeColor(color);
+          setLastCommittedColor(color);
+        }
+      }
+    },
+    [strokeColor, previousColor1, previousColor2]
+  );
 
   const handleReset = useCallback(() => {
     canvasRef.current?.resetCanvas();
@@ -74,7 +131,7 @@ export default function SketchBoard() {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents:
-          "Give me an idea to draw, make it simple as possible, it can be animal, fruits/vegetables, nature. Be simple as you can in your answers like 'draw a snake', or 'draw a apple tree', also use adjectives like 'draw big snake' or 'draw blue bird', not longer than a sentence and only one suggestion at the moment.",
+          "You are an idea generator for a drawing app. Each time you are asked, give one short, clear idea for something to draw. Keep it very simple, like something a child could doodle in less than a minute. Use short phrasing such as “draw a big green frog” or “draw a smiling sun.” Vary your subjects across animals, food, nature, and everyday objects. Do not repeat previous ideas within the same session if possible. The response should only contain the drawing idea and nothing else.",
       });
       const text = response.text;
       setPrompt(text);
@@ -132,9 +189,26 @@ export default function SketchBoard() {
         {/* Color Picker */}
         <h1>Pick a color: </h1>
         <input
-          className="border w-12 h-12"
+          className="border w-12 h-12 -p-12"
           type="color"
+          value={strokeColor}
           onChange={handleStrokeColorChange}
+          onBlur={handleStrokeColorChangeEnd}
+          onMouseUp={handleStrokeColorChangeEnd}
+        />
+
+        {/* Previous Color Buttons */}
+        <button
+          onClick={() => handlePreviousColorClick(previousColor1)}
+          className="w-8 h-8 border-2 border-gray-300 rounded cursor-pointer hover:border-gray-500 transition-colors"
+          style={{ backgroundColor: previousColor1 }}
+          title="Previous color 1"
+        />
+        <button
+          onClick={() => handlePreviousColorClick(previousColor2)}
+          className="w-8 h-8 border-2 border-gray-300 rounded cursor-pointer hover:border-gray-500 transition-colors"
+          style={{ backgroundColor: previousColor2 }}
+          title="Previous color 2"
         />
       </div>
 
@@ -188,7 +262,7 @@ export default function SketchBoard() {
               cr={1}
               className={cn(
                 "text-gray-300/50 absolute inset-0 z-0",
-                "[mask-image:radial-gradient(1200px_circle_at_center,white,transparent)]"
+                "[mask-image:radial-gradient(2000px_circle_at_center,white,transparent)]"
               )}
             />
             <ReactSketchCanvas
@@ -214,7 +288,24 @@ export default function SketchBoard() {
         <input
           className="border w-12 h-12"
           type="color"
+          value={strokeColor}
           onChange={handleStrokeColorChange}
+          onBlur={handleStrokeColorChangeEnd}
+          onMouseUp={handleStrokeColorChangeEnd}
+        />
+
+        {/* Previous Color Buttons */}
+        <button
+          onClick={() => handlePreviousColorClick(previousColor1)}
+          className="w-8 h-8 border-2 border-gray-300 rounded cursor-pointer hover:border-gray-500 transition-colors"
+          style={{ backgroundColor: previousColor1 }}
+          title="Previous color 1"
+        />
+        <button
+          onClick={() => handlePreviousColorClick(previousColor2)}
+          className="w-8 h-8 border-2 border-gray-300 rounded cursor-pointer hover:border-gray-500 transition-colors"
+          style={{ backgroundColor: previousColor2 }}
+          title="Previous color 2"
         />
       </div>
 
