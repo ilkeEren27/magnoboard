@@ -19,7 +19,7 @@ MagnoBoard is an online playground where users can:
 * Draw with a digital “magnetic pen.”
 * Shake or clear the board with a button animation (like flipping the toy upside down).
 * Save or share their creations.
-* Get random *drawing prompts* powered by AI, like “Draw your favorite toy” or “What did you want to be when you grew up?”
+* Get random *drawing prompts* powered by AI, like “Draw a green apple” or “Draw a fluffy sleeping cat”
 
 It’s simple, creative, and relaxing, the kind of app that makes your inner child proud.
 
@@ -29,7 +29,7 @@ It’s simple, creative, and relaxing, the kind of app that makes your inner chi
 
 **AI & External Resources**
 
-During development, I used documentation (Next.js, TailwindCSS, ShadCN, MagicUI and react-sketh-canvas) and community resources (Stack Overflow, MDN).
+During development, I only used documentation (Next.js, TailwindCSS, ShadCN and react-sketh-canvas).
 
 I also used AI tools (ChatGPT and GitHub Copilot) for debugging help, UI suggestions, and boilerplate generation.
 
