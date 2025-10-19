@@ -78,6 +78,44 @@ export default function SketchBoard() {
     }
   };
 
+  const downloadImageWithWhiteBackground = async () => {
+    try {
+      const data = await canvasRef.current?.exportImage("png");
+
+      const tempImg = new Image();
+
+      tempImg.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = tempImg.width;
+        canvas.height = tempImg.height;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.drawImage(tempImg, 0, 0);
+
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.download = `sketch-${
+            new Date().toISOString().split("T")[0]
+          }-${Date.now()}.png`;
+          link.href = url;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }, "image/png");
+      };
+
+      tempImg.src = data;
+    } catch (e) {
+      console.error("Error exporting image:", e);
+    }
+  };
+
   return (
     <main>
       <div className="hidden md:flex justify-center items-center gap-4 mb-4">
@@ -108,18 +146,9 @@ export default function SketchBoard() {
 
         <Button
           className="bg-blue-500 hover:bg-blue-700"
-          onClick={() => {
-            canvasRef.current
-              ?.exportImage("png")
-              .then((data) => {
-                console.log(data);
-              })
-              .catch((e) => {
-                console.log(e);
-              });
-          }}
+          onClick={downloadImageWithWhiteBackground}
         >
-          Get Image
+          Download Image
         </Button>
       </div>
 
@@ -204,18 +233,9 @@ export default function SketchBoard() {
 
         <Button
           className="bg-blue-500 hover:bg-blue-700"
-          onClick={() => {
-            canvasRef.current
-              ?.exportImage("png")
-              .then((data) => {
-                console.log(data);
-              })
-              .catch((e) => {
-                console.log(e);
-              });
-          }}
+          onClick={downloadImageWithWhiteBackground}
         >
-          Get Image
+          Download Image
         </Button>
       </div>
 
