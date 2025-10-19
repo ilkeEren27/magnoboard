@@ -1,16 +1,22 @@
 "use client";
-import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useRef, useState, useCallback, useEffect } from "react";
+import { ReactSketchCanvas } from "react-sketch-canvas";
 import { GoogleGenAI } from "@google/genai";
 import { motion } from "motion/react";
-import { Button } from "./ui/button";
+
+// Components from ShadCN/MagicUI
 import { DotPattern } from "./ui/dot-pattern";
+import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+
+// Detecting shake for phones
 import useShake from "@/hooks/useShake";
 
+// Did this so I can use Framer Motion on ShadCN's Button component
 const MotionButton = motion(Button);
 
 export default function SketchBoard() {
+  // mlh.link/gemini-quickstart helped me
   const ai = new GoogleGenAI({
     apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
   });
@@ -21,7 +27,7 @@ export default function SketchBoard() {
   const [isLoading, setIsLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
 
-  // iOS motion permission
+  // iOS motion permission (Got help from ChatGPT here)
   const [motionReady, setMotionReady] = useState(false);
   const askMotionPermission = async () => {
     try {
@@ -43,6 +49,7 @@ export default function SketchBoard() {
       setMotionReady(true);
   }, []);
 
+  // Canvas features
   const handleStrokeColorChange = (event) => {
     setStrokeColor(event.target.value);
   };
@@ -60,6 +67,7 @@ export default function SketchBoard() {
     cooldown: 900, // prevent spam
   });
 
+  // mlh.link/gemini-quickstart helped me
   const createPrompt = async () => {
     setIsLoading(true);
     try {
@@ -78,6 +86,7 @@ export default function SketchBoard() {
     }
   };
 
+  // Downloading the image (canvas size adapts to users device size (ISN'T IT SO COOL?))
   const downloadImageWithWhiteBackground = async () => {
     try {
       const data = await canvasRef.current?.exportImage("png");
@@ -118,7 +127,9 @@ export default function SketchBoard() {
 
   return (
     <main>
+      {/* Desktop */}
       <div className="hidden md:flex justify-center items-center gap-4 mb-4">
+        {/* Color Picker */}
         <h1>Pick a color: </h1>
         <input
           className="border w-12 h-12"
@@ -127,6 +138,7 @@ export default function SketchBoard() {
         />
       </div>
 
+      {/* Functions */}
       <div className="hidden md:flex justify-center items-center gap-4 mb-4">
         <MotionButton
           whileTap={{ scale: 0.9 }}
@@ -197,6 +209,7 @@ export default function SketchBoard() {
       </section>
       {/* Mobile */}
       <div className="flex md:hidden justify-center items-center gap-4 mb-4">
+        {/* Color Picker */}
         <h1>Pick a color: </h1>
         <input
           className="border w-12 h-12"
@@ -218,6 +231,7 @@ export default function SketchBoard() {
         )}
       </div>
 
+      {/* Functions */}
       <div className="flex md:hidden justify-center items-center gap-4 mb-4">
         <Button onClick={handleReset} className="bg-red-500 hover:bg-red-700">
           Shake

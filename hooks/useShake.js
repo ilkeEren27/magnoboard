@@ -1,3 +1,4 @@
+// Got help from ChatGPT to figure out this whole feature (which is very cool in my opinion)
 "use client";
 import { useEffect, useRef } from "react";
 
